@@ -1,0 +1,11 @@
+# downloaded dataset, recreated automatically by main.py
+data_mit_intrinsic/
+
+# generated figures
+results/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/

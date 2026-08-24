@@ -64,8 +64,10 @@ For each superpixel, computes:
 ### Requirements
 
 ```bash
-pip install numpy matplotlib opencv-python scikit-image scikit-learn jupyter
+pip install -r requirements.txt
 ```
+
+Python 3.9+ is recommended.
 
 ### Key Dependencies
 
@@ -74,30 +76,38 @@ pip install numpy matplotlib opencv-python scikit-image scikit-learn jupyter
 - `opencv-python`: Image I/O and bilateral filtering
 - `scikit-image`: SLIC superpixels and color space conversion
 - `scikit-learn`: K-Means clustering and metrics
-- `jupyter`: Interactive notebook environment
 
 ## Usage
 
-1. Open the notebook:
-   ```bash
-   jupyter notebook script.ipynb
-   ```
+Run the full analysis:
 
-2. Run all cells to:
-   - Download and extract the dataset
-   - Train the model on a selected image
-   - Test on additional images
-   - Visualize results
+```bash
+python main.py
+```
 
-3. Adjust parameters in Section 2:
-   ```python
-   k = 6                  # Number of clusters
-   wL = 0.15             # Lightness weight
-   wXY = 0.25            # Position weight
-   wTex = 0.10           # Texture weight
-   n_segments = 500      # Superpixel segments
-   compactness = 12.0    # SLIC compactness parameter
-   ```
+That will download and extract the dataset on first run, fit K-Means on the
+selected training image, decompose both the training and test images, and display
+every figure.
+
+Useful flags:
+
+```bash
+python main.py --save-figures        # also write figures to results/figures/
+python main.py --no-figures          # headless, print metrics only
+python main.py --k 8                 # override the number of clusters
+python main.py --n-segments 800      # override the superpixel count
+```
+
+Parameters live in `src/config.py`:
+
+```python
+K = 6                  # Number of clusters
+W_L = 0.15             # Lightness weight
+W_XY = 0.25            # Position weight
+W_TEX = 0.10           # Texture weight
+N_SEGMENTS = 500       # Superpixel segments
+COMPACTNESS = 12.0     # SLIC compactness parameter
+```
 
 ## Results
 
@@ -141,11 +151,35 @@ Reflectance range: [0.000, 1.000]
 ## Project Structure
 
 ```
-SpTp2/
-├── script.ipynb         # Main notebook
-├── README.md            # This file
-└── data_mit_intrinsic/  # Downloaded dataset (created automatically)
-    └── intrinsic-data.tar.gz
+.
+├── main.py                  # CLI entry point
+├── requirements.txt
+├── README.md
+├── src/
+│   ├── config.py            # paths, SLIC/K-Means settings, decomposition constants
+│   ├── dataset.py           # download, extract, image collection and chroma ranking
+│   ├── superpixels.py       # SLIC segmentation
+│   ├── features.py          # Lab conversion and per-superpixel feature vectors
+│   ├── clustering.py        # K-Means fitting, standardization, silhouette
+│   ├── decomposition.py     # bilateral shading estimate, shading/reflectance split
+│   ├── visualization.py     # every plot
+│   └── pipeline.py          # wires the stages into train/test runs
+├── data_mit_intrinsic/      # Downloaded dataset (created automatically, gitignored)
+└── results/figures/         # Written by --save-figures (gitignored)
+```
+
+### How the modules connect
+
+```
+main.py
+  └── pipeline.run_all()
+        ├── dataset.ensure_dataset() -> collect_rgb_paths() -> select_colorful_image()
+        ├── run_train()  ── superpixels.run_slic() ─┐
+        │                   features.build_train_features()
+        │                   clustering.fit_train()  ├─> decomposition.decompose()
+        │                   features.expand_to_pixel_map()
+        ├── run_test()   ── same chain, but build_test_features() + fit_test()
+        └── report_metrics() ── clustering.silhouette() + visualization chips
 ```
 
 ## References
