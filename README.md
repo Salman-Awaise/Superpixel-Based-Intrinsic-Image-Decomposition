@@ -1,5 +1,10 @@
 # Superpixel-Based Intrinsic Image Decomposition
 
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![scikit-image](https://img.shields.io/badge/scikit--image-SLIC-F7931E?logo=python&logoColor=white)](https://scikit-image.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-bilateral-5C3EE8?logo=opencv&logoColor=white)](https://opencv.org/)
+[![Dataset](https://img.shields.io/badge/dataset-MIT%20Intrinsic-blue)](http://people.csail.mit.edu/rgrosse/intrinsic/)
+
 A computational photography project that decomposes images into their intrinsic components: **shading** (illumination) and **reflectance** (albedo). This implementation uses SLIC superpixel segmentation, K-Means clustering, and bilateral filtering to separate the lighting effects from the surface properties of objects.
 
 ## Overview
@@ -184,9 +189,10 @@ main.py
 
 ## References
 
-- **Dataset**: MIT Intrinsic Images (Barron & Malik, 2011)
-- **SLIC**: Achanta et al., "SLIC Superpixels" (PAMI 2012)
-- **Intrinsic Images**: Grosse et al., "Ground truth dataset and baseline evaluations" (ICCV 2009)
+- **Dataset**: Grosse, Johnson, Adelson and Freeman, *Ground truth dataset and baseline evaluations for intrinsic image algorithms*, ICCV 2009. [[paper]](https://people.csail.mit.edu/rgrosse/intrinsic/) — the MIT Intrinsic Images dataset used here.
+- **SLIC**: Achanta et al., *SLIC Superpixels Compared to State-of-the-art Superpixel Methods*, PAMI 2012. [[paper]](https://ieeexplore.ieee.org/document/6205760)
+- **Bilateral filtering**: Tomasi and Manduchi, *Bilateral Filtering for Gray and Color Images*, ICCV 1998. [[paper]](https://ieeexplore.ieee.org/document/710815)
+- **Retinex background**: Land and McCann, *Lightness and Retinex Theory*, JOSA 1971.
 
 ## Notes
 
@@ -201,4 +207,4 @@ This project is for educational and research purposes. The MIT Intrinsic Images 
 
 ## Author
 
-Advanced Perception Project - SpTp2
+Salman Awaise — built for a computational photography / advanced perception course project.
