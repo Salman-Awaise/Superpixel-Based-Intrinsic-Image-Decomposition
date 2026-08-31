@@ -203,8 +203,4 @@ main.py
 
 ## License
 
-This project is for educational and research purposes. The MIT Intrinsic Images dataset has its own licensing terms.
-
-## Author
-
-Salman Awaise — built for a computational photography / advanced perception course project.
+The MIT Intrinsic Images dataset has its own licensing terms.
